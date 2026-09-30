@@ -1,0 +1,84 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/29/2026 12:28:33 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-RM463RA"
+  DTS:CreatorName="DESKTOP-RM463RA\User"
+  DTS:DTSID="{845C92BE-B84F-4D77-9C1C-91FC9220B8F4}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="01_Load_DimDate"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{ACC7014C-D3C9-4859-B3D5-C21B08602235}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DW_Connection]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C4A22B42-2EE7-4473-9F69-539DA4F23414}"
+      DTS:ObjectName="DW_Connection">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=OnlineRetail_DW;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Application Name=SSIS-01_Load_DimDate-{C4A22B42-2EE7-4473-9F69-539DA4F23414}(localdb)\MSSQLLocalDB.OnlineRetail_DW;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Staging_Connection]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{80369459-4559-46AE-8013-384A2A1B4565}"
+      DTS:ObjectName="Staging_Connection">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=OnlineRetail_Staging;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Application Name=SSIS-01_Load_DimDate-{80369459-4559-46AE-8013-384A2A1B4565}(localdb)\MSSQLLocalDB.OnlineRetail_Staging;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Truncate and Reload DimDate"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{0729E35E-093D-48B9-942C-CD4FB06E5401}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate and Reload DimDate"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{C4A22B42-2EE7-4473-9F69-539DA4F23414}"
+          SQLTask:SqlStatementSource="DELETE FROM dbo.DimDate;&#xA;&#xA;DECLARE @d DATE = '2009-01-01';&#xA;WHILE @d &lt;= '2012-12-31'&#xA;BEGIN&#xA;    INSERT INTO dbo.DimDate&#xA;    VALUES (&#xA;        CONVERT(INT, FORMAT(@d, 'yyyyMMdd')),&#xA;        @d,&#xA;        DAY(@d),&#xA;        DATENAME(WEEKDAY, @d),&#xA;        MONTH(@d),&#xA;        DATENAME(MONTH, @d),&#xA;        DATEPART(QUARTER, @d),&#xA;        'Q' + CAST(DATEPART(QUARTER, @d) AS VARCHAR(1)),&#xA;        YEAR(@d),&#xA;        CASE WHEN DATENAME(WEEKDAY, @d) IN ('Saturday','Sunday') THEN 1 ELSE 0 END&#xA;    );&#xA;    SET @d = DATEADD(DAY, 1, @d);&#xA;END;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="221,42"
+          Id="Package\Truncate and Reload DimDate"
+          TopLeft="199,135" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
