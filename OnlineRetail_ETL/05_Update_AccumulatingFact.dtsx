@@ -1,0 +1,72 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/5/2026 11:15:46 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-RM463RA"
+  DTS:CreatorName="DESKTOP-RM463RA\User"
+  DTS:DTSID="{B59DB591-B9A6-4E97-8E48-9CADB6256555}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="05_Update_AccumulatingFact"
+  DTS:PackageType="5"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{0FDEA927-118F-44A5-8419-9E25A9F9649C}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(localdb)\MSSQLLocalDB.OnlineRetail_DW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{41B8BA82-F1D8-4DE6-BAC4-FEE16A48447E}"
+      DTS:ObjectName="(localdb)\MSSQLLocalDB.OnlineRetail_DW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=OnlineRetail_DW;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Application Name=SSIS-05_Update_AccumulatingFact-{41B8BA82-F1D8-4DE6-BAC4-FEE16A48447E}(localdb)\MSSQLLocalDB.OnlineRetail_DW;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Update Complete Time and Process Hours"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{C0E98345-14E7-4679-BF24-FE0FAFF1DE41}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Update Complete Time and Process Hours"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{41B8BA82-F1D8-4DE6-BAC4-FEE16A48447E}"
+          SQLTask:SqlStatementSource="UPDATE dbo.FactSales&#xA;SET&#xA;    accm_txn_complete_time = DATEADD(&#xA;        HOUR,&#xA;        1 + (ABS(CHECKSUM(NEWID())) % 72),&#xA;        accm_txn_create_time&#xA;    ),&#xA;    txn_process_time_hours = NULL&#xA;WHERE accm_txn_complete_time IS NULL;&#xA;&#xA;UPDATE dbo.FactSales&#xA;SET txn_process_time_hours = CAST(&#xA;    DATEDIFF(MINUTE, accm_txn_create_time, accm_txn_complete_time) AS DECIMAL(10,2)&#xA;) / 60.0&#xA;WHERE txn_process_time_hours IS NULL&#xA;  AND accm_txn_complete_time IS NOT NULL;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="277,42"
+          Id="Package\Update Complete Time and Process Hours"
+          TopLeft="193,24" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
